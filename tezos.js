@@ -1,47 +1,11 @@
-import { TezosToolkit } from '@taquito/taquito';
 
+import { RpcClient } from '@taquito/rpc';
 
-/// rpc config
-const testRpc = "https://ghostnet.ecadinfra.com";
+const client = new RpcClient('https://ghostnet.ecadinfra.com', 'main');
 
-const mainRpc = "";
+const balance = await client.getBalance('tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb');
+console.log('-- Balance:', balance.toNumber());
 
-const rpc = testRpc;
-
-/// toolkit & provider
-const Tezos = new TezosToolkit(testRpc);
-
-// account config
-const address = "tz1W613XY1VYJYhmvM6XMhkkRJMXvRMbTiuj";
-
-// get balance test
-async function getBalanceTest()  {
-    const balance = await Tezos.tz.getBalance(address);
-    console.log(balance)
-}
-
-
-
-async function estimateTransferTest() {
-    const amount = 2;
-    Tezos.setProvider({signer: address})
-    Tezos.estimate
-    .transfer({ source: address, to: address, amount: amount })
-    .then((est) => {
-      println(`burnFeeMutez : ${est.burnFeeMutez}, 
-      gasLimit : ${est.gasLimit}, 
-      minimalFeeMutez : ${est.minimalFeeMutez}, 
-      storageLimit : ${est.storageLimit}, 
-      suggestedFeeMutez : ${est.suggestedFeeMutez}, 
-      totalCost : ${est.totalCost}, 
-      usingBaseFeeMutez : ${est.usingBaseFeeMutez}`);
-    })
-    .catch((error) => console.table(`Error: ${JSON.stringify(error, null, 2)}`));
-  
-}
-
-function main () {
-    estimateTransferTest()
-}
-
-main()
+// gets contract storage
+const storage = await client.getStorage(contractExample);
+console.log('-- Contract storage:', storage);
