@@ -55,25 +55,40 @@ async function create2Dummy() {
   // 
 }
 
+// utxo info
+var nftHash = "484e1b8c1c6776f935de2ed31c44b5c475998827879cbabe4394be8740b8c25b";
+var nftIndex = 0;
+var nftPrice = 5000000;
+var nftNonwitnessUtxo = "0200000000010137f3c97d1d1f88a1b86c790ae5d9839a5a28b0cc8274f23e07ac3865b889aef00000000000fdffffff0122020000000000001976a9142080c44ce0c1ad69e49b11e364b45848cf3da8cc88ac0340c2d210b32c74a88059fdf72171bd450e36cb93809655ad893e4d61feeb4a15e24413af9c2ee847c7b914d77a700024d6bea6758ecedd34d393fe2a5c1598a7bf590063036f7264010118746578742f706c61696e3b636861727365743d7574662d3800357b2270223a226272632d3230222c226f70223a226d696e74222c227469636b223a22706f6e31222c22616d74223a2231303030227d6821c0406cd7e5d61e4c27c7eddcb22af0019bd46c9250bd571bd750075678a84b337800000000"
+
+// buyer hash
+var dummyHash = "42beee00514b86770b9c31288d7d644fbf7e8b0db755ca83150ae76553ac546c";
+var dummyTx = "0200000004d8e88ce08403f506df3e9c830f3876601242699359c357ce9caf48ce211ee61c030000006a47304402207af3a3ec940cd97ab77d972e9cdaf5e21be3e5d3db53da8fc64fb024ddd08dc602205b4032ff69ba33d6b75069827a4ebc5708f51bc3e8ecf8869f9103457845d2ba012103b48aee4a6dec95c0e98e5dc31737bdd46b220b79f804a96d93eb06c1b71270effdffffffd8e88ce08403f506df3e9c830f3876601242699359c357ce9caf48ce211ee61c040000006a473044022078123f26bff396782f2ad2fa3d7c370fef136f496e8f3a0dbde168d6d02248d5022061b3cf9009eae2eef479ff77536cc257aad216dd52bc8815899a29b2741b5eed012103b48aee4a6dec95c0e98e5dc31737bdd46b220b79f804a96d93eb06c1b71270effdffffffc29ad10355ab4b816dfdb62039497d9cd76b1a548991fa31d37d868109d3f334000000006a47304402205fe2c06774f47716be161b3035ab4eec0c550798d8a303b3dc5547a0263e47d4022033321ee766594c76055cb23638660c312a219012a6e8d77542771c08ac30b211832102406cd7e5d61e4c27c7eddcb22af0019bd46c9250bd571bd750075678a84b3378fdffffffd8e88ce08403f506df3e9c830f3876601242699359c357ce9caf48ce211ee61c050000006b483045022100d59286514eb9f7e45c81e127e172fd049bc9cc5202e72604b418aef34ab5b9d1022036f9f68506c8c281a3101f3e8ec9ea795a0580a7015ff3998d11cb9a6c98f326012103b48aee4a6dec95c0e98e5dc31737bdd46b220b79f804a96d93eb06c1b71270effdffffff06b0040000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac22020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac404b4c00000000001976a9142080c44ce0c1ad69e49b11e364b45848cf3da8cc88ac58020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac58020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac00c63e05000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac00000000";
+ // buyer utxo, spend
+ // buyer address
+ var buyerAddress = "n1EmAHAzvCgQYaKkGLm1e5taFauCiuNzHK"
+ var sellerAddress = "miUpB4pCtoMSzgsv3k8XG69u6usGXhuPYi"
+
 async function sellerListingOrder() {
-    const hash = "285b91e9fc3d79b01aaa59610891644cded9cb3a5a03d0b56666dda33057f502";
-    const index = 0;
-    // 0.05 BTC
-    const price = 5000000
-
-    var privateKeyHex = "bd0003fcc25ac8c2dfaaa8413405156498114a9d1627486af8f5b27de35309f9";
-    var destination = "miUpB4pCtoMSzgsv3k8XG69u6usGXhuPYi";
-    const seller = ECPair.fromPrivateKey(Buffer.from(privateKeyHex, 'hex'))
-
-
+  // seller info
+  var privateKeyHex = "bd0003fcc25ac8c2dfaaa8413405156498114a9d1627486af8f5b27de35309f9";
+  var destination = "miUpB4pCtoMSzgsv3k8XG69u6usGXhuPYi";
+  const seller = ECPair.fromPrivateKey(Buffer.from(privateKeyHex, 'hex'))
     const psbt = new bitcoin.Psbt({ network: bitcoin.networks.regtest });
-
+    psbt.addInput({
+      hash: nftHash,
+      index: 1,
+    });
+    psbt.addInput({
+      hash: nftHash,
+      index: 2,
+    });
     // seller action ---------->
     // brc20 inscription.
     psbt.addInput({
-        hash: hash,
-        index: index,
-        nonWitnessUtxo: Buffer.from("02000000000101bc2e8824a1eda93521945cf008a28fb9db3eb311f57838ff14967926b3773a480000000000ffffffff0122020000000000001976a9142080c44ce0c1ad69e49b11e364b45848cf3da8cc88ac034015c16684f2f0c33e59af47005966aead2133070fa08250efa151525c81b784f40c7ccc24930076cd5d36408f3bf45dae67af5eb21ddf856cf01c6684736d32ad5b0063036f7264010118746578742f706c61696e3b636861727365743d7574662d3800377b2270223a226272632d3230222c226f70223a227472616e73666572222c227469636b223a22706f6e31222c22616d74223a223130227d6821c1406cd7e5d61e4c27c7eddcb22af0019bd46c9250bd571bd750075678a84b337800000000", "hex"),
+        hash: nftHash,
+        index: nftIndex,
+        nonWitnessUtxo: Buffer.from(nftNonwitnessUtxo, "hex"),
         sighashType: bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY,
       });
     // seller receive btc
@@ -82,35 +97,44 @@ async function sellerListingOrder() {
         destination,
         bitcoin.networks.regtest
       ),
-      value: price,
+      value: nftPrice,
     });
-    psbt.signInput(0, seller, [bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY]);
+    psbt.addOutput({
+      script: bitcoin.address.toOutputScript(
+        destination,
+        bitcoin.networks.regtest
+      ),
+      value: 1,
+    });
+    psbt.addOutput({
+      script: bitcoin.address.toOutputScript(
+        destination,
+        bitcoin.networks.regtest
+      ),
+      value: nftPrice,
+    });
+    psbt.signInput(2, seller, [bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY]);
     var firstInfo = psbt.toBase64();
-    console.log("-----end psbt---\r\n", firstInfo);
-    psbt.finalizeAllInputs()
-    console.log(psbt.extractTransaction().toHex())
+    return firstInfo;
+    // console.log("-----end psbt---\r\n", firstInfo);
     //  cHNidP8BAFUCAAAAAQL1VzCj3WZmtdADWjrL2d5MZJEIYVmqGrB5PfzpkVsoAAAAAAD/////AUBLTAAAAAAAGXapFCCAxEzgwa1p5JsR42S0WEjPPajMiKwAAAAAAAEA/RcBAgAAAAABAbwuiCSh7ak1IZRc8Aiij7nbPrMR9Xg4/xSWeSazdzpIAAAAAAD/////ASICAAAAAAAAGXapFCCAxEzgwa1p5JsR42S0WEjPPajMiKwDQBXBZoTy8MM+Wa9HAFlmrq0hMwcPoIJQ76FRUlyBt4T0DHzMJJMAds1dNkCPO/RdrmevXrId34Vs8BxmhHNtMq1bAGMDb3JkAQEYdGV4dC9wbGFpbjtjaGFyc2V0PXV0Zi04ADd7InAiOiJicmMtMjAiLCJvcCI6InRyYW5zZmVyIiwidGljayI6InBvbjEiLCJhbXQiOiIxMCJ9aCHBQGzX5dYeTCfH7dyyKvABm9RsklC9VxvXUAdWeKhLM3gAAAAAAQdrSDBFAiEAukCezkYcZRkgDbSuyLwCpxZEbbKNR9TgOmYgARfVaDMCIBeq9ijYd2IKni5Ai3Kq2lBGkEcL3fqwlhc2Kz6hv1m+ASECQGzX5dYeTCfH7dyyKvABm9RsklC9VxvXUAdWeKhLM3gAAA==
-   
 }
 
 async function buyerOffer() {
   var privateKeyHex = "d2dc8880c72520d61554cf3d90dcd54c98c0e04329c11c3c5b48e9a976ff4e29";
   const buyer = ECPair.fromPrivateKey(Buffer.from(privateKeyHex, 'hex'))
-
+  
   const psbt = new bitcoin.Psbt({ network: bitcoin.networks.regtest });
-   // buyer utxo, spend
-   // buyer address
-   var buyerAddress = "n1EmAHAzvCgQYaKkGLm1e5taFauCiuNzHK"
    // first dummy
    psbt.addInput({
-     hash: "d47b5484ee5ba72e1be0f90fdffdc9c9abd5406de1d1189c43f31428bcce2066",
-     index: 0,
-     nonWitnessUtxo: Buffer.from("0200000001ef86c1ff80911b0494ea09a1f3f4c80f2957cdd8b8c0c3656b8b246d64157e31010000006a47304402207f0a0bcf7207e32a806970321b22200d2263a902f4dd7e59f6e10ffe8e81cf9902206d26ec55d7f4c1aa9b629ce63bbfe9e88b2dcf77e7aa6bb36987c4dbe1475315012103b48aee4a6dec95c0e98e5dc31737bdd46b220b79f804a96d93eb06c1b71270efffffffff0358020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac58020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac24dbf505000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac00000000", "hex")
+     hash: dummyHash,
+     index: 3,
+     nonWitnessUtxo: Buffer.from(dummyTx, "hex")
    });
    psbt.addInput({
-    hash: "d47b5484ee5ba72e1be0f90fdffdc9c9abd5406de1d1189c43f31428bcce2066",
-    index: 1,
-    nonWitnessUtxo: Buffer.from("0200000001ef86c1ff80911b0494ea09a1f3f4c80f2957cdd8b8c0c3656b8b246d64157e31010000006a47304402207f0a0bcf7207e32a806970321b22200d2263a902f4dd7e59f6e10ffe8e81cf9902206d26ec55d7f4c1aa9b629ce63bbfe9e88b2dcf77e7aa6bb36987c4dbe1475315012103b48aee4a6dec95c0e98e5dc31737bdd46b220b79f804a96d93eb06c1b71270efffffffff0358020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac58020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac24dbf505000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac00000000", "hex")
+    hash: dummyHash,
+    index: 4,
+    nonWitnessUtxo: Buffer.from(dummyTx, "hex")
   });
    // buyer receive inscription
    psbt.addOutput({
@@ -129,28 +153,26 @@ async function buyerOffer() {
     value: 546,
   })
   // append seller input & output
-  // console.log("sPsbt:\r\n", JSON.stringify(sPsbt))
-  // psbt.addInput(sPsbt.data.inputs[0]);
-  // psbt.addOutput(sPsbt.data.outputs[0]);
   psbt.addInput({
-    hash: "285b91e9fc3d79b01aaa59610891644cded9cb3a5a03d0b56666dda33057f502",
-    index: 0,
+    hash: nftHash,
+    index: nftIndex,
+    nonWitnessUtxo: Buffer.from(nftNonwitnessUtxo, "hex"),
     sighashType: bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY,
-    nonWitnessUtxo: Buffer.from("02000000000101bc2e8824a1eda93521945cf008a28fb9db3eb311f57838ff14967926b3773a480000000000ffffffff0122020000000000001976a9142080c44ce0c1ad69e49b11e364b45848cf3da8cc88ac034015c16684f2f0c33e59af47005966aead2133070fa08250efa151525c81b784f40c7ccc24930076cd5d36408f3bf45dae67af5eb21ddf856cf01c6684736d32ad5b0063036f7264010118746578742f706c61696e3b636861727365743d7574662d3800377b2270223a226272632d3230222c226f70223a227472616e73666572222c227469636b223a22706f6e31222c22616d74223a223130227d6821c1406cd7e5d61e4c27c7eddcb22af0019bd46c9250bd571bd750075678a84b337800000000", "hex"),
   });
+  // seller receive btc
   psbt.addOutput({
     script: bitcoin.address.toOutputScript(
-      "miUpB4pCtoMSzgsv3k8XG69u6usGXhuPYi",
+      sellerAddress,
       bitcoin.networks.regtest
     ),
-    value: 5000000,
+    value: nftPrice,
   });
   // -------------------------
   // add buyer payment utxo
   psbt.addInput({
-    hash: "d47b5484ee5ba72e1be0f90fdffdc9c9abd5406de1d1189c43f31428bcce2066",
-    index: 2,
-    nonWitnessUtxo: Buffer.from("0200000001ef86c1ff80911b0494ea09a1f3f4c80f2957cdd8b8c0c3656b8b246d64157e31010000006a47304402207f0a0bcf7207e32a806970321b22200d2263a902f4dd7e59f6e10ffe8e81cf9902206d26ec55d7f4c1aa9b629ce63bbfe9e88b2dcf77e7aa6bb36987c4dbe1475315012103b48aee4a6dec95c0e98e5dc31737bdd46b220b79f804a96d93eb06c1b71270efffffffff0358020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac58020000000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac24dbf505000000001976a914d85290e927b8e20b1e48dbfeac9d8ea4c9a9955088ac00000000", "hex")
+    hash: dummyHash,
+    index: 5,
+    nonWitnessUtxo: Buffer.from(dummyTx, "hex")
   });
   // todo:// skip platform fee
   
@@ -175,7 +197,7 @@ async function buyerOffer() {
       buyerAddress,
       bitcoin.networks.regtest
     ),
-    value: 93991500,
+    value: 82990000,
   })
   
   const toSignInputs = [];
@@ -195,30 +217,29 @@ async function buyerOffer() {
           toSignInputs.push({
             index,
             publicKey: buyer.publicKey,
-            sighashTypes: [bitcoin.Transaction.SIGHASH_ALL]
           });
         }
       }
   })
   toSignInputs.forEach((input)=> {
     console.log(`sign index:${input.index}`);
-    psbt.signInput(input.index, buyer,[bitcoin.Transaction.SIGHASH_ALL]);
-    // psbt.finalizeInput(input.index)
+    psbt.signInput(input.index, buyer,[bitcoin.Transaction.SIGHASH_ALL, bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY,bitcoin.Transaction.SIGHASH_DEFAULT]);
   })
-  psbt.signAllInputs(buyer, [bitcoin.Transaction.SIGHASH_ALL])
-  console.log(psbt.toBase64())
+  return psbt.toBase64()
   // buyer psbt: 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
 }
 
 async function mergeSignBuyinngPSBT() {
-  var sellPsbt = "cHNidP8BAFUCAAAAAQL1VzCj3WZmtdADWjrL2d5MZJEIYVmqGrB5PfzpkVsoAAAAAAD/////AUBLTAAAAAAAGXapFCCAxEzgwa1p5JsR42S0WEjPPajMiKwAAAAAAAEA/RcBAgAAAAABAbwuiCSh7ak1IZRc8Aiij7nbPrMR9Xg4/xSWeSazdzpIAAAAAAD/////ASICAAAAAAAAGXapFCCAxEzgwa1p5JsR42S0WEjPPajMiKwDQBXBZoTy8MM+Wa9HAFlmrq0hMwcPoIJQ76FRUlyBt4T0DHzMJJMAds1dNkCPO/RdrmevXrId34Vs8BxmhHNtMq1bAGMDb3JkAQEYdGV4dC9wbGFpbjtjaGFyc2V0PXV0Zi04ADd7InAiOiJicmMtMjAiLCJvcCI6InRyYW5zZmVyIiwidGljayI6InBvbjEiLCJhbXQiOiIxMCJ9aCHBQGzX5dYeTCfH7dyyKvABm9RsklC9VxvXUAdWeKhLM3gAAAAAIgICQGzX5dYeTCfH7dyyKvABm9RsklC9VxvXUAdWeKhLM3hIMEUCIQC6J5o4RFTvSX+NA6IbOg4oDg0y/9psfNgqmgluqvSXKgIgMIf6SS9RnAaK4eSDMbsyi4vCmMGqtRwAmE5EibGCIM+DAQMEgwAAAAAA";
-  var buyerPsbt = "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";
+  var sellPsbt = await sellerListingOrder();
+  var buyerPsbt = await buyerOffer();
   const sellerSignedPsbt = bitcoin.Psbt.fromBase64(sellPsbt);
   const buyerSignedPsbt = bitcoin.Psbt.fromBase64(buyerPsbt);
   console.log("sellerSignedPsbt", JSON.stringify(sellerSignedPsbt));
   console.log("buyerSignedPsbt", JSON.stringify(buyerSignedPsbt));
-  // (buyerSignedPsbt.data.globalMap.unsignedTx).tx.ins[2] = (sellerSignedPsbt.data.globalMap.unsignedTx).tx.ins[0];
-  buyerSignedPsbt.data.inputs[2] = sellerSignedPsbt.data.inputs[0];
+  (buyerSignedPsbt.data.globalMap.unsignedTx).tx.ins[2] = (sellerSignedPsbt.data.globalMap.unsignedTx).tx.ins[2];
+  (buyerSignedPsbt.data.globalMap.unsignedTx).tx.outs[2] = (sellerSignedPsbt.data.globalMap.unsignedTx).tx.outs[2];
+  buyerSignedPsbt.data.outputs[2] = sellerSignedPsbt.data.outputs[2];
+  buyerSignedPsbt.data.inputs[2] = sellerSignedPsbt.data.inputs[2];
   buyerSignedPsbt.finalizeAllInputs()
   var res = buyerSignedPsbt.extractTransaction().toHex()
   console.log(res);
@@ -460,12 +481,28 @@ export function psbtSignImpl(psbt, privateKey, network) {
   }
 }
 
+
+function generateAddress() {
+  var privateKeyHex = "d2dc8880c72520d61554cf3d90dcd54c98c0e04329c11c3c5b48e9a976ff4e29";
+  const buyer = ECPair.fromPrivateKey(Buffer.from(privateKeyHex, 'hex'))
+  var bip44 = bitcoin.payments.p2pkh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
+  // var bip49 = bitcoin.payments.p2sh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
+  // var bip84 = bitcoin.payments.p2tr({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
+  // var bip86 = bitcoin.payments.p2wpkh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
+  // console.log("bip44:", bip44);
+  // console.log("bip49:", bip49);
+  console.log("bip84:", bip84);
+  // console.log("bip86:", bip86);
+}
+
 async function main() {
   // create2Dummy()
   // sellerListingOrder()
   // buyerOffer()
-  // mergeSignBuyinngPSBT()
-  sigleTransactionTest()
+  mergeSignBuyinngPSBT()
+  // generateAddress()
 }
+
+
 
 main()
