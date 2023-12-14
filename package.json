@@ -15,6 +15,7 @@
     "@cosmjs/stargate": "^0.31.1",
     "@gear-js/api": "^0.35.1",
     "@ledgerhq/hw-app-eth": "^6.34.7",
+    "@okxweb3/coin-bitcoin": "^1.0.2",
     "@polkadot/api": "^10.10.1",
     "@polkadot/api-augment": "^10.10.1",
     "@sei-js/core": "^3.0.4",

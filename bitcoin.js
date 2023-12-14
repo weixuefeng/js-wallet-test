@@ -1,11 +1,10 @@
-import * as assert from 'assert';
 import {ECPairFactory} from 'ecpair';
 import * as ecc from 'tiny-secp256k1';
 import * as bitcoin from 'bitcoinjs-lib'
 
-const APIPASS = process.env.APIPASS || 'satoshi';
-const APIURL = process.env.APIURL || 'http://127.0.0.1:8332/';
+bitcoin.initEccLib(ecc);
 const ECPair = ECPairFactory(ecc);
+const toXOnly = pubKey => (pubKey.length === 32 ? pubKey : pubKey.slice(1, 33));
 
 const DUMMY_UTXO_AMOUNT = 600;
 
@@ -481,25 +480,26 @@ export function psbtSignImpl(psbt, privateKey, network) {
   }
 }
 
-
 function generateAddress() {
-  var privateKeyHex = "d2dc8880c72520d61554cf3d90dcd54c98c0e04329c11c3c5b48e9a976ff4e29";
+  var privateKeyHex = "";
   const buyer = ECPair.fromPrivateKey(Buffer.from(privateKeyHex, 'hex'))
+  
   var bip44 = bitcoin.payments.p2pkh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
-  // var bip49 = bitcoin.payments.p2sh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
+  var bip49 = bitcoin.payments.p2sh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
   // var bip84 = bitcoin.payments.p2tr({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
-  // var bip86 = bitcoin.payments.p2wpkh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
+  // console.log(buyer.publicKey)
+  var bip86 = bitcoin.payments.p2tr({ internalPubkey: toXOnly(buyer.publicKey), network: bitcoin.networks.bitcoin }).address
   // console.log("bip44:", bip44);
   // console.log("bip49:", bip49);
-  console.log("bip84:", bip84);
   // console.log("bip86:", bip86);
+  console.log("bip49:", bip49);
 }
 
 async function main() {
   // create2Dummy()
   // sellerListingOrder()
   // buyerOffer()
-  mergeSignBuyinngPSBT()
+  generateAddress()
   // generateAddress()
 }
 
