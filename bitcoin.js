@@ -481,26 +481,28 @@ export function psbtSignImpl(psbt, privateKey, network) {
 }
 
 function generateAddress() {
-  var privateKeyHex = "";
+  var privateKeyHex = "bd0003fcc25ac8c2dfaaa8413405156498114a9d1627486af8f5b27de35309f9";
   const buyer = ECPair.fromPrivateKey(Buffer.from(privateKeyHex, 'hex'))
+  var network = bitcoin.networks.bitcoin;
   
-  var bip44 = bitcoin.payments.p2pkh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
-  var bip49 = bitcoin.payments.p2sh({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
-  // var bip84 = bitcoin.payments.p2tr({ pubkey: buyer.publicKey, network: bitcoin.networks.regtest }).address
-  // console.log(buyer.publicKey)
-  var bip86 = bitcoin.payments.p2tr({ internalPubkey: toXOnly(buyer.publicKey), network: bitcoin.networks.bitcoin }).address
-  // console.log("bip44:", bip44);
-  // console.log("bip49:", bip49);
-  // console.log("bip86:", bip86);
+  var bip44 = bitcoin.payments.p2pkh({ pubkey: buyer.publicKey, network: network }).address
+  var bip49 = bitcoin.payments.p2sh({ redeem: bitcoin.payments.p2wpkh (
+      { pubkey: buyer.publicKey,
+        network: network 
+      }
+    ), 
+    network: network}
+    ).address
+  var bip84 = bitcoin.payments.p2wpkh({ pubkey: buyer.publicKey, network: network }).address
+  var bip86 = bitcoin.payments.p2tr({ internalPubkey: toXOnly(buyer.publicKey), network: network }).address
+  console.log("bip44:", bip44);
   console.log("bip49:", bip49);
+  console.log("bip84:", bip84);
+  console.log("bip86:", bip86);
 }
 
 async function main() {
-  // create2Dummy()
-  // sellerListingOrder()
-  // buyerOffer()
   generateAddress()
-  // generateAddress()
 }
 
 

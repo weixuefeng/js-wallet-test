@@ -1,6 +1,5 @@
 import * as gate from "@okxweb3/coin-bitcoin"
-
-
+import * as bitcoin from "bitcoinjs-lib"
 var sellerPrivateKeyHex = "0xbd0003fcc25ac8c2dfaaa8413405156498114a9d1627486af8f5b27de35309f9";
 
 
@@ -87,5 +86,22 @@ function mergeTest() {
     var res = psbt.extractTransaction().toHex()
     console.log(res);
 }
+
+function test() {
+    var privateKeyHex = "L4WXTAvKKPRhwWoM6iQBfuxqVDQMjijpVhasHxVVrA67TsHbZk6P";
+    // const keyPair = ECPair.fromPrivateKey(gate.wif.decode(privateKeyHex).privateKey)
+    // var psbt = bitcoin.Psbt.fromHex("70736274ff0100f4020000000300000000000000000000000000000000000000000000000000000000000000000000000000ffffffff00000000000000000000000000000000000000000000000000000000000000000100000000ffffffff93a69b2ef6fe1288298939c9936fef14f7e9b721f4dea2889faf5d8c7030412e0000000000ffffffff0300000000000000001976a914000000000000000000000000000000000000000088ac00000000000000001976a914000000000000000000000000000000000000000088ac005a6202000000002251206d49c3e9808053eca2ba9f6b57fc053eaacd9cd623055bbb96533dc0206aa509000000000001011f0000000000000000160014ae47938f7acd1623e6e10e1ebcc33c2a7cb6e30d0001011f0000000000000000160014ae47938f7acd1623e6e10e1ebcc33c2a7cb6e30d0001012b22020000000000002251206d49c3e9808053eca2ba9f6b57fc053eaacd9cd623055bbb96533dc0206aa50901030483000000011720af8edd7b4b644143d2b53fdf82551e45322018247655ed28a8eb0f0e98fbcb6800000000")
+    // psbt.data.inputs.forEach((e) => {
+    //     console.log(JSON.stringify(e))
+    // })
+    // psbt.signAllInputs(keyPair, [bitcoin.Transaction.SIGHASH_ANYONECANPAY | bitcoin.Transaction.SIGHASH_SINGLE,bitcoin.Transaction.SIGHASH_ALL])
+    // psbt.finalizeAllInputs()
+    // var res = psbt.extractTransaction().toHex()
+    // console.log(res);
+    var content = "cHNidP8BAPQCAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAP////+Tppsu9v4SiCmJOcmTb+8U9+m3IfTeooifr12McDBBLgAAAAAA/////wMAAAAAAAAAABl2qRQAAAAAAAAAAAAAAAAAAAAAAAAAAIisAAAAAAAAAAAZdqkUAAAAAAAAAAAAAAAAAAAAAAAAAACIrABaYgIAAAAAIlEgbUnD6YCAU+yiup9rV/wFPqrNnNYjBVu7llM9wCBqpQkAAAAAAAEBHwAAAAAAAAAAFgAUrkeTj3rNFiPm4Q4evMM8Kny24w0AAQEfAAAAAAAAAAAWABSuR5OPes0WI+bhDh68wzwqfLbjDQABASsiAgAAAAAAACJRIG1Jw+mAgFPsorqfa1f8BT6qzZzWIwVbu5ZTPcAgaqUJAQMEgwAAAAEXIK+O3XtLZEFD0rU/34JVHkUyIBgkdlXtKKjrDw6Y+8toAAAAAA=="
+    var res = gate.psbtSign(content, privateKeyHex)
+    console.log(content === res);
+    console.log("Res:",res)
+}
   
-mergeTest()
+listOrder()
