@@ -1,7 +1,7 @@
 import {ECPairFactory} from 'ecpair';
 import * as ecc from 'tiny-secp256k1';
 import * as bitcoin from 'bitcoinjs-lib'
-
+import * as gateLib from '@okxweb3/coin-bitcoin'
 bitcoin.initEccLib(ecc);
 const ECPair = ECPairFactory(ecc);
 const toXOnly = pubKey => (pubKey.length === 32 ? pubKey : pubKey.slice(1, 33));
@@ -500,9 +500,43 @@ function generateAddress() {
   console.log("bip84:", bip84);
   console.log("bip86:", bip86);
 }
+var mainTest = {
+  /**
+bip44: 13xrt1jE5mvCDaQJLBA9SAwaEvGZg4Ux58
+bip49: 3Gksp1S41nfFER2gEKCBnDakfCv96D5aRf
+bip84: bc1qyzqvgn8qcxkkneymz83kfdzcfr8nm2xvn3jr08
+bip86: bc1prn9txsu3dvz409svqpgt4cu3mwfgz2y2qll8ra67yya4ynarkzfsggw5h8
+   */
+}
+
+var regTest = {
+  /**
+bip44: miUpB4pCtoMSzgsv3k8XG69u6usGXhuPYi
+bip49: 2N8K5skN5dFAbSCfDuSp4QAa1sZ8Jw2P77V
+bip84: bcrt1qyzqvgn8qcxkkneymz83kfdzcfr8nm2xvm7sara
+bip86: bcrt1prn9txsu3dvz409svqpgt4cu3mwfgz2y2qll8ra67yya4ynarkzfsjejacj
+   */
+}
+function transferUtxo() {
+  var build = new gateLib.TxBuild(1, gateLib.networks.bitcoin)
+  var wif = "L3Z6tQ2N2FLfRDZJmRgfAAZ3Tz1W5HmYEoD7jmttNASNzhRZbe9u";
+  var addr = "3Gksp1S41nfFER2gEKCBnDakfCv96D5aRf"
+  build.addInput("7983d85991110b6f490849afc27288f868979f70010e0978d0389ae9d41bd41d", 0, wif, addr, "", 546, null, 0xffffffd)
+  build.addInput("38314edce5f450bd1337c22b9a2c5f5de9117d2de2b48add38daebf09dda171a", 1, wif, addr, "", 99989646, null, 0xffffffd)
+  build.addOutput("bc1prn9txsu3dvz409svqpgt4cu3mwfgz2y2qll8ra67yya4ynarkzfsggw5h8", 546);
+  var tx = build.build();
+  var fee = gateLib.estimateBtcFee({
+    inputs: build.inputs,
+    outputs: build.outputs,
+    address: addr,
+    fee:2
+  });
+  console.log("fee:", fee);
+  console.log("tx:", tx)
+}
 
 async function main() {
-  generateAddress()
+  transferUtxo()
 }
 
 

@@ -1,5 +1,6 @@
 import * as gateLib from '@okxweb3/coin-bitcoin'
-
+import { base } from '@okxweb3/crypto-lib';
+import * as bitcoin from 'bitcoinjs-lib'
 var network = gateLib.networks.bitcoin;
 
 var privateKeyHex = "bd0003fcc25ac8c2dfaaa8413405156498114a9d1627486af8f5b27de35309f9";
@@ -56,5 +57,43 @@ async function commitTest() {
     var res = gateLib.inscribe(gateLib.dogeCoin, request);
     console.log(res);
 }
+import { BtcWallet } from "@okxweb3/coin-bitcoin";
 
-commitTest();
+async function createDummy() {
+    let wallet = new BtcWallet()
+    let btcTxParams = {
+      inputs: [
+        {
+          txId: "728f2b82f9326e7689262403d56cdc9ec8e6bd407f110a0341ee9128054b40d1",
+          vOut: 0,
+          amount: 100000000
+        },
+      ],
+      outputs: [
+        {
+          address: "bc1prn9txsu3dvz409svqpgt4cu3mwfgz2y2qll8ra67yya4ynarkzfsggw5h8",
+          amount: 600
+        },
+        {
+          address: "bc1prn9txsu3dvz409svqpgt4cu3mwfgz2y2qll8ra67yya4ynarkzfsggw5h8",
+          amount: 600
+        },
+        {
+            address: "bc1prn9txsu3dvz409svqpgt4cu3mwfgz2y2qll8ra67yya4ynarkzfsggw5h8",
+            amount: 1200
+          },
+      ],
+      address: "bc1qyzqvgn8qcxkkneymz83kfdzcfr8nm2xvn3jr08",
+      feePerB: 2
+    };
+    
+    let signParams = {
+      privateKey: wifPriv,
+      data: btcTxParams
+    };
+    let res = await wallet.signTransaction(signParams);
+    console.log("res:", res);
+}
+
+
+createDummy();
